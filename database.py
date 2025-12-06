@@ -1,7 +1,3 @@
-"""
-Database operations for Personal Schedule Assistant.
-"""
-
 import sqlite3
 from datetime import datetime, date, timedelta
 from typing import List, Optional, Dict, Any
@@ -214,4 +210,5 @@ class Database:
             reminder_minutes=row['reminder_minutes'],
             created_at=datetime.fromisoformat(row['created_at']),
             updated_at=datetime.fromisoformat(row['updated_at'])
+
         )
