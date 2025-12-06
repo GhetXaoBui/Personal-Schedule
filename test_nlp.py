@@ -15,13 +15,11 @@ class NLPTester:
         self.prepare_test_cases()
     
     def prepare_test_cases(self):
-        """Chuẩn bị 30 test cases theo yêu cầu."""
         now = datetime.now()
         today = now.date()
         
         # Định dạng: (input_text, expected_output_dict)
         self.test_cases = [
-            # Test 1-5: Các định dạng thời gian cơ bản
             {
                 "input": "họp nhóm ở phòng 302 lúc 10h",
                 "expected": {
@@ -67,8 +65,6 @@ class NLPTester:
                     "has_location": True
                 }
             },
-            
-            # Test 6-10: Thời gian với sáng/chiều/tối
             {
                 "input": "học bài lúc 8h sáng tại thư viện",
                 "expected": {
@@ -114,8 +110,6 @@ class NLPTester:
                     "has_location": True
                 }
             },
-            
-            # Test 11-15: Thời gian tương đối (mai, ngày mai, hôm nay)
             {
                 "input": "họp nhóm sáng mai lúc 9h",
                 "expected": {
@@ -161,8 +155,6 @@ class NLPTester:
                     "has_location": False
                 }
             },
-            
-            # Test 16-20: Ngày trong tuần (thứ hai, thứ 3, etc.)
             {
                 "input": "họp công ty thứ hai lúc 10h",
                 "expected": {
@@ -208,8 +200,6 @@ class NLPTester:
                     "has_location": True
                 }
             },
-            
-            # Test 21-25: Cuối tuần và không dấu
             {
                 "input": "du lich cuoi tuan luc 8h sang",
                 "expected": {
@@ -255,8 +245,6 @@ class NLPTester:
                     "has_location": False
                 }
             },
-            
-            # Test 26-30: Các trường hợp đặc biệt
             {
                 "input": "tiệc tùng lúc 20h tối nay tại club",
                 "expected": {
@@ -305,7 +293,6 @@ class NLPTester:
         ]
     
     def normalize_text(self, text):
-        """Chuẩn hóa text để so sánh."""
         if not text:
             return ""
         # Chuyển về chữ thường, bỏ dấu đơn giản
@@ -320,7 +307,6 @@ class NLPTester:
         return ' '.join(text.split())
     
     def contains_keywords(self, actual_text, expected_text):
-        """Kiểm tra xem actual_text có chứa từ khóa của expected_text không."""
         if not actual_text or not expected_text:
             return False
         
@@ -336,13 +322,11 @@ class NLPTester:
         if not expected_keywords:
             expected_keywords = list(expected_words)
         
-        # Đếm số từ khóa có trong actual text
         matched = 0
         for keyword in expected_keywords:
             if keyword in actual_text:
                 matched += 1
         
-        # Cần ít nhất 50% từ khóa được tìm thấy
         return matched >= max(1, len(expected_keywords) * 0.5)
     
     def compare_results(self, actual_event, expected):
@@ -355,7 +339,7 @@ class NLPTester:
             if not self.contains_keywords(actual_name, expected_name):
                 return False, "Tên sự kiện sai"
             
-            # 2. Kiểm tra giờ (cho phép sai số 1-2 giờ cho AM/PM)
+            # 2. Kiểm tra giờ
             actual_hour = actual_event.start_time.hour
             expected_hour = expected["hour"]
             
@@ -363,7 +347,7 @@ class NLPTester:
             if hour_diff > 2 and hour_diff not in [12, 11, 13]:  # Cho phép AM/PM nhầm
                 return False, f"Giờ sai: {actual_hour} giờ (mong đợi: {expected_hour} giờ)"
             
-            # 3. Kiểm tra phút (cho phép sai số 5 phút)
+            # 3. Kiểm tra phút
             actual_minute = actual_event.start_time.minute
             expected_minute = expected["minute"]
             
@@ -384,9 +368,8 @@ class NLPTester:
             return False, f"Lỗi so sánh: {e}"
     
     def run_tests(self):
-        """Chạy tất cả test cases và chỉ hiển thị câu sai."""
         print("=" * 80)
-        print("KIỂM TRA NLP PROCESSOR - CHỈ HIỂN THỊ CÂU SAI")
+        print("KIỂM TRA NLP PROCESSOR")
         print("=" * 80)
         
         total_tests = len(self.test_cases)
@@ -448,7 +431,7 @@ class NLPTester:
                 
                 expected = fail['expected']
                 location_expected = "có địa điểm" if expected['has_location'] else "không có địa điểm"
-                print(f"  Mong đợi: {expected['event']} lúc {expected['hour']:02d}:{expected['minute']:02d} ({location_expected})")
+                print(f"  Kết quả mong đợi: {expected['event']} lúc {expected['hour']:02d}:{expected['minute']:02d} ({location_expected})")
         else:
             print(f"\nKHÔNG CÓ CÂU NÀO SAI! (100% chính xác)")
         
@@ -472,11 +455,7 @@ class NLPTester:
 
 
 def main():
-    """Hàm chính để chạy test."""
     tester = NLPTester()
-    
-    print("Đang chạy kiểm tra NLP Processor...")
-    print("Chỉ hiển thị các câu sai, câu đúng sẽ không hiển thị.")
     print("=" * 80)
     
     accuracy, failed_tests = tester.run_tests()
