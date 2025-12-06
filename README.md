@@ -23,15 +23,15 @@ pip install -r requirements.txt
 
 cấu trúc thư mục
 PSA/
-├── main.py              # Điểm khởi chạy chính
-├── main_window.py       # Giao diện chính
-├── database.py          # Thao tác cơ sở dữ liệu
-├── models.py            # Định nghĩa dữ liệu
-├── nlp_processor.py     # Xử lý ngôn ngữ tự nhiên
-├── file_handler.py      # Xử lý file JSON
-├── test_nlp.py          # Kiểm tra NLP
-├── requirements.txt     # Thư viện cần thiết
-└── README.md            # Tài liệu
+main.py              # Điểm khởi chạy chính
+main_window.py       # Giao diện chính
+database.py          # Thao tác cơ sở dữ liệu
+models.py            # Định nghĩa dữ liệu
+nlp_processor.py     # Xử lý ngôn ngữ tự nhiên
+file_handler.py      # Xử lý file JSON
+test_nlp.py          # Kiểm tra NLP
+requirements.txt     # Thư viện cần thiết
+README.md            # Tài liệu
 
 Chạy chương trình
 python main.py
@@ -39,3 +39,4 @@ python main.py
 Kiểm tra độ chính xác
 
 python test_nlp.py
+
