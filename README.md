@@ -37,4 +37,5 @@ Chạy chương trình
 python main.py
 
 Kiểm tra độ chính xác
+
 python test_nlp.py
