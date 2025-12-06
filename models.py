@@ -1,7 +1,3 @@
-"""
-Data models for the Personal Schedule Assistant application.
-"""
-
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional, Dict, Any
@@ -85,4 +81,5 @@ class Event:
     
     def get_date_display(self) -> str:
         """Get formatted date display."""
+
         return self.start_time.strftime("%d/%m/%Y")
