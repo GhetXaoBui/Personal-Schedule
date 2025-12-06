@@ -1,0 +1,6 @@
+PyQt6>=6.5.0
+transformers>=4.30.0
+pyvi>=0.1.1
+regex>=2023.6.3
+python-dateutil>=2.8.2
+underthesea
