@@ -6,8 +6,6 @@ from underthesea import word_tokenize, pos_tag, ner
 
 
 class UndertheseaNLPProcessor:
-    """NLP Processor using Underthesea for Vietnamese language understanding."""
-    
     def __init__(self):
         self.now = datetime.now()
         
@@ -86,7 +84,7 @@ class UndertheseaNLPProcessor:
         if not text or len(text.strip()) < 3:
             return None
         
-        print(f"\n[Parsing] Input: '{text}'")
+        print(f"\nParsing Input: '{text}'")
         
         try:
             # Step 1: Phân tích NLP bằng thư viện Underthesea
@@ -103,7 +101,7 @@ class UndertheseaNLPProcessor:
             
             # Step 3: Khi phân tích Underthesea thất bại, dùng phương pháp rule-based thay thế
             if not components or 'event_name' not in components:
-                print("[Warning] Underthesea extraction failed, using rule-based fallback")
+                print("Underthesea extraction failed, using rule-based fallback")
                 return self._parse_with_rules(text.lower())
             
             # Step 4: Tạo datetime
@@ -122,16 +120,16 @@ class UndertheseaNLPProcessor:
                 reminder_minutes=15
             )
             
-            print(f"[Success] Created: {event.event_name} at {event.start_time}")
+            print(f"Success Created: {event.event_name} at {event.start_time}")
             return event
             
         except Exception as e:
-            print(f"[Error] Underthesea parsing failed: {e}")
+            print(f"Error Underthesea parsing failed: {e}")
             # Chuyển sang phân tích dựa trên rule-based
             return self._parse_with_rules(text.lower())
     
     def _extract_with_underthesea(self, text: str, tokens, pos_tags, ner_result):
-        """Extract event components using Underthesea."""
+        # Trích xuất các thành phần sự kiện bằng Underthesea.
         components = {}
         
         # 1. Phân tích tên sự kiện thông qua POS tags
@@ -162,7 +160,7 @@ class UndertheseaNLPProcessor:
         return components
     
     def _extract_event_name_from_pos(self, pos_tags, original_text):
-        """Extract event name using POS tagging."""
+        # Trích xuất tên sự kiện bằng cách sử dụng POS
         event_words = []
         
         # Strategy 1: Xác định cụm động từ
@@ -194,7 +192,7 @@ class UndertheseaNLPProcessor:
         return event_name if event_name and len(event_name) > 1 else None
     
     def _extract_location_from_ner(self, ner_result):
-        """Extract location from Named Entity Recognition."""
+        # Trích xuất vị trí từ NER
         locations = []
         
         for entity in ner_result:
@@ -207,7 +205,7 @@ class UndertheseaNLPProcessor:
         return None
     
     def _extract_time_info(self, text: str) -> Optional[Dict[str, int]]:
-        """Extract time information from text."""
+        # Trích xuất thời gian từ câu đầu vào
         for pattern in self.time_patterns:
             match = re.search(pattern, text, re.IGNORECASE)
             if match:

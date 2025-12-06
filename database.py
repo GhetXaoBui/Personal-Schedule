@@ -1,3 +1,4 @@
+
 import sqlite3
 from datetime import datetime, date, timedelta
 from typing import List, Optional, Dict, Any
@@ -20,7 +21,6 @@ class Database:
         return conn
     
     def init_database(self):
-        """Create tables if they don't exist."""
         with self.get_connection() as conn:
             cursor = conn.cursor()
             
@@ -40,7 +40,6 @@ class Database:
             conn.commit()
     
     def add_event(self, event: Event) -> int:
-        """Add a new event to database."""
         with self.get_connection() as conn:
             cursor = conn.cursor()
             
@@ -63,7 +62,6 @@ class Database:
             return event_id
     
     def update_event(self, event: Event) -> bool:
-        """Update an existing event."""
         with self.get_connection() as conn:
             cursor = conn.cursor()
             
@@ -90,7 +88,6 @@ class Database:
             return cursor.rowcount > 0
     
     def delete_event(self, event_id: int) -> bool:
-        """Delete an event by ID."""
         with self.get_connection() as conn:
             cursor = conn.cursor()
             
@@ -100,7 +97,6 @@ class Database:
             return cursor.rowcount > 0
     
     def get_event(self, event_id: int) -> Optional[Event]:
-        """Get a single event by ID."""
         with self.get_connection() as conn:
             cursor = conn.cursor()
             
@@ -112,7 +108,6 @@ class Database:
             return None
     
     def get_all_events(self) -> List[Event]:
-        """Get all events sorted by start time."""
         with self.get_connection() as conn:
             cursor = conn.cursor()
             
@@ -122,7 +117,6 @@ class Database:
             return [self._row_to_event(row) for row in rows]
     
     def get_events_by_date(self, target_date: date) -> List[Event]:
-        """Get events for a specific date."""
         with self.get_connection() as conn:
             cursor = conn.cursor()
             
@@ -139,7 +133,6 @@ class Database:
             return [self._row_to_event(row) for row in rows]
     
     def get_events_by_week(self, target_date: date) -> List[Event]:
-        """Get events for the week containing the target date."""
         with self.get_connection() as conn:
             cursor = conn.cursor()
             
@@ -160,7 +153,6 @@ class Database:
             return [self._row_to_event(row) for row in rows]
     
     def get_events_by_month(self, year: int, month: int) -> List[Event]:
-        """Get events for a specific month."""
         with self.get_connection() as conn:
             cursor = conn.cursor()
             
@@ -185,7 +177,6 @@ class Database:
             return [self._row_to_event(row) for row in rows]
     
     def search_events(self, keyword: str) -> List[Event]:
-        """Search events by keyword in event_name or location."""
         with self.get_connection() as conn:
             cursor = conn.cursor()
             
@@ -200,7 +191,6 @@ class Database:
             return [self._row_to_event(row) for row in rows]
     
     def _row_to_event(self, row) -> Event:
-        """Convert database row to Event object."""
         return Event(
             id=row['id'],
             event_name=row['event_name'],
@@ -210,5 +200,4 @@ class Database:
             reminder_minutes=row['reminder_minutes'],
             created_at=datetime.fromisoformat(row['created_at']),
             updated_at=datetime.fromisoformat(row['updated_at'])
-
         )

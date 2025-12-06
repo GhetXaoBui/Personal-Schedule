@@ -31,7 +31,6 @@ class MainWindow(QMainWindow):
         self.load_events()
     
     def setup_ui(self):
-        """Setup the main window UI as shown in image."""
         self.setWindowTitle("Personal Schedule Assistant")
         self.setGeometry(100, 100, 900, 700) 
         
@@ -82,7 +81,7 @@ class MainWindow(QMainWindow):
         self.search_input.returnPressed.connect(self.search_events)
         search_layout.addWidget(self.search_input)
         
-        search_button = QPushButton("🔍 Tìm kiếm")
+        search_button = QPushButton("Tìm kiếm")
         search_button.clicked.connect(self.search_events)
         search_button.setMinimumWidth(100)
         search_layout.addWidget(search_button)
@@ -270,7 +269,6 @@ class MainWindow(QMainWindow):
             )
     
     def display_events(self, events: list):
-        """Display events in table."""
         self.events_table.setRowCount(len(events))
         
         for row, event in enumerate(events):
@@ -297,7 +295,6 @@ class MainWindow(QMainWindow):
             self.events_table.setItem(row, 3, name_item)
     
     def on_event_selected(self):
-        """When an event is selected in the table."""
         selected_items = self.events_table.selectedItems()
         
         if not selected_items:
@@ -345,9 +342,8 @@ class MainWindow(QMainWindow):
             self.location_check.setChecked(False)
             self.reminder_check.setChecked(False)
     
-    # === PHẦN TÌM KIẾM MỚI ===
+    # PHẦN TÌM KIẾM
     def search_events(self):
-        """Tìm kiếm sự kiện theo từ khóa."""
         keyword = self.search_input.text().strip()
         
         if not keyword:
@@ -362,7 +358,6 @@ class MainWindow(QMainWindow):
         self.display_search_results(search_results, keyword)
     
     def display_search_results(self, events: list, keyword: str):
-        """Hiển thị kết quả tìm kiếm."""
         if not events:
             QMessageBox.information(
                 self, 
@@ -383,7 +378,6 @@ class MainWindow(QMainWindow):
         )
     
     def clear_search(self):
-        """Xóa kết quả tìm kiếm và quay lại chế độ xem bình thường."""
         self.search_input.clear()
         self.is_searching = False
         self.search_results = []
@@ -399,7 +393,6 @@ class MainWindow(QMainWindow):
 
     
     def add_event_nlp(self):
-        """Add event using NLP input."""
         text = self.nlp_input.text().strip()
         
         if not text:
@@ -441,7 +434,6 @@ class MainWindow(QMainWindow):
             QMessageBox.critical(self, "Lỗi", f"Có lỗi xảy ra: {str(e)}")
     
     def edit_event(self):
-        """Edit selected event."""
         selected_items = self.events_table.selectedItems()
         
         if not selected_items:
@@ -503,7 +495,6 @@ class MainWindow(QMainWindow):
                 QMessageBox.critical(self, "Lỗi", f"Có lỗi: {str(e)}")
     
     def delete_event(self):
-        """Delete selected event."""
         selected_items = self.events_table.selectedItems()
         
         if not selected_items:
@@ -538,7 +529,6 @@ class MainWindow(QMainWindow):
                 QMessageBox.critical(self, "Lỗi", "Không thể xóa sự kiện!")
     
     def change_view(self):
-        """Change view mode based on radio buttons."""
         if self.day_radio.isChecked():
             self.current_view = "day"
         elif self.week_radio.isChecked():
@@ -554,7 +544,6 @@ class MainWindow(QMainWindow):
             self.load_events()
     
     def prev_period(self):
-        """Go to previous period."""
         if self.current_view == "day":
             self.current_date -= timedelta(days=1)
         elif self.current_view == "week":
@@ -573,7 +562,6 @@ class MainWindow(QMainWindow):
             self.load_events()
     
     def next_period(self):
-        """Go to next period."""
         if self.current_view == "day":
             self.current_date += timedelta(days=1)
         elif self.current_view == "week":
@@ -592,7 +580,6 @@ class MainWindow(QMainWindow):
             self.load_events()
     
     def go_to_today(self):
-        """Go to today."""
         self.current_date = date.today()
         
         # Nếu đang tìm kiếm, xóa tìm kiếm
@@ -603,7 +590,6 @@ class MainWindow(QMainWindow):
             self.load_events()
     
     def export_events(self):
-        """Export events to JSON."""
         events = []
         
         # Nếu đang tìm kiếm, xuất kết quả tìm kiếm
@@ -636,7 +622,6 @@ class MainWindow(QMainWindow):
                 QMessageBox.critical(self, "Lỗi", "Không thể xuất file!")
     
     def import_events(self):
-        """Import events from JSON."""
         filename, _ = QFileDialog.getOpenFileName(
             self,
             "Nhập sự kiện",
