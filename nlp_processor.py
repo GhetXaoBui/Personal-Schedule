@@ -45,20 +45,19 @@ class UndertheseaNLPProcessor:
     
     def _initialize_patterns(self):
         """Initialize regex patterns for backup parsing."""
-        # Time_patterns
+        # Time_patterns - thêm cả không dấu
         self.time_patterns = [
-            r'(?:lúc|luc|vào lúc|vào khoảng|khoảng)\s*(\d{1,2})\s*(?:giờ|h|:)\s*(\d{0,2})?\s*(sáng|chiều|tối|trưa|đêm|am|pm)?',
-            r'(\d{1,2})\s*(?:giờ|h|:)\s*(\d{0,2})?\s*(sáng|chiều|tối|trưa|đêm|am|pm)',
-            r'(\d{1,2})\s*(?:giờ|h|:)\s*(\d{0,2})?',
-            r'(sáng|chiều|tối|trưa|đêm)\s*(\d{1,2})\s*(?:giờ|h)',
-        ]
-        
-        # location_patterns
-        self.location_patterns = [
-            r'(?:ở|tại|tại địa điểm|ở phòng|tại phòng|tại tầng|ở tầng|tại công ty|ở công ty|tại nhà|ở nhà|tại quán|ở quán|tại trường|ở trường)\s+([^,.;]{2,50}?)(?=\s+(?:lúc|\d{1,2}(?:\s*(?:giờ|h|:))|sáng|chiều|tối|trưa|đêm|$|và|rồi))',
-            r'(?:ở|tại)\s+([^,.;]{2,50})(?=\s|$)',
+            r'(?:lúc|luc|vào lúc|vao luc|vào khoảng|vao khoang|khoảng|khoang)\s*(\d{1,2})\s*(?:giờ|gio|h|:)\s*(\d{0,2})?\s*(sáng|sang|chiều|chieu|tối|toi|trưa|trua|đêm|dem|am|pm)?',
+            r'(\d{1,2})\s*(?:giờ|gio|h|:)\s*(\d{0,2})?\s*(sáng|sang|chiều|chieu|tối|toi|trưa|trua|đêm|dem|am|pm)',
+            r'(\d{1,2})\s*(?:giờ|gio|h|:)\s*(\d{0,2})?',
+            r'(sáng|sang|chiều|chieu|tối|toi|trưa|trua|đêm|dem)\s*(\d{1,2})\s*(?:giờ|gio|h)',
         ]
     
+    # location_patterns - thêm cả không dấu
+        self.location_patterns = [
+            r'(?:ở|o|tại|tai|tại địa điểm|tai dia diem|ở phòng|o phong|tại phòng|tai phong|tại tầng|tai tang|ở tầng|o tang|tại công ty|tai cong ty|ở công ty|o cong ty|tại nhà|tai nha|ở nhà|o nha|tại quán|tai quan|ở quán|o quan|tại trường|tai truong|ở trường|o truong)\s+([^,.;]{2,50}?)(?=\s+(?:lúc|luc|\d{1,2}(?:\s*(?:giờ|gio|h|:))|sáng|sang|chiều|chieu|tối|toi|trưa|trua|đêm|dem|$|và|va|rồi|roi))',
+            r'(?:ở|o|tại|tai)\s+([^,.;]{2,50})(?=\s|$)',
+        ]
     def _initialize_keywords(self):
         """Initialize date and time keywords."""
         self.date_keywords = {
@@ -167,7 +166,7 @@ class UndertheseaNLPProcessor:
         for word, pos in pos_tags:
             if pos.startswith('V') or pos.startswith('N'):  # Verbs or nouns
                 # Bỏ các từ nối và giới từ thông dụng
-                if word.lower() in ['lúc', 'ở', 'tại', 'vào', 'từ', 'đến']:
+                if word.lower() in ['lúc', 'ở', 'tại', 'vào', 'từ', 'đến', 'luc', 'o', 'tai', 'vao', 'tu', 'den']:
                     break
                 event_words.append(word)
             elif pos == 'CH':  # Dấu câu - thường đánh dấu kết thúc mô tả event
@@ -176,7 +175,7 @@ class UndertheseaNLPProcessor:
         # Strategy 2: Nếu không tìm thấy động từ phù hợp, lấy một vài từ có nghĩa đầu tiên
         if not event_words or len(' '.join(event_words)) < 2:
             for word, pos in pos_tags[:3]:  # First 3 tokens
-                if pos != 'CH' and word.lower() not in ['lúc', 'ở', 'tại']:
+                if pos != 'CH' and word.lower() not in ['lúc', 'ở', 'tại', 'luc']:
                     event_words.append(word)
         
         event_name = ' '.join(event_words).strip()
@@ -239,10 +238,10 @@ class UndertheseaNLPProcessor:
             # Điều chỉnh cho định dạng 12 giờ
             if period:
                 period_lower = period.lower()
-                if period_lower in ['chiều', 'tối', 'đêm', 'pm']:
+                if period_lower in ['chiều', 'tối', 'đêm', 'pm', 'chieu', 'toi', 'dem']:
                     if hour < 12:
                         hour += 12
-                elif period_lower in ['sáng', 'am']:
+                elif period_lower in ['sáng', 'am', 'sang']:
                     if hour == 12:
                         hour = 0
             
@@ -268,7 +267,7 @@ class UndertheseaNLPProcessor:
     
     def _clean_location_text(self, text: str) -> str:
         """Clean and format location text."""
-        time_words = ['lúc', 'sáng', 'chiều', 'tối', 'trưa', 'đêm', 'giờ', 'h']
+        time_words = ['lúc', 'sáng', 'chiều', 'tối', 'trưa', 'đêm', 'giờ', 'h', 'luc', 'sang', 'trua', 'chieu', 'toi', 'dem', 'gio']
         for word in time_words:
             text = re.sub(r'\b' + re.escape(word) + r'\b', '', text, flags=re.IGNORECASE)
         
