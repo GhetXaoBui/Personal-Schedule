@@ -13,7 +13,7 @@ List sự kiện, thời gian, địa điểm
 Sử dụng tiếng Việt
 
 Yêu cầu hệ thống
-python 3.8 trở lên
+python 3.10 trở lên
 khuyến nghị sử dụng python 3.11.9
 hệ điều hành windows
 
@@ -38,3 +38,4 @@ python main.py
 
 Kiểm tra độ chính xác
 python test_nlp.py
+
