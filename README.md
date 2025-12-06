@@ -18,9 +18,9 @@ khuyến nghị sử dụng python 3.11.9
 hệ điều hành windows
 
 Hướng dẫn cài đặt
-
-
-
+git clone https://github.com/GhetXaoBui/Personal-Schedule
+Hoặc down file zip từ link: https://drive.google.com/drive/u/0/folders/1_KnuYfqVjTDittt4yqMma3hzZstKFjda
+Giải nén file zip và chạy terminal của thư mục
 pip install -r requirements.txt
 
 Chạy chương trình
@@ -28,5 +28,6 @@ python main.py
 
 Kiểm tra độ chính xác
 python test_nlp.py
+
 
 
